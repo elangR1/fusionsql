@@ -19,7 +19,8 @@ esi.inventory_item_id
 , esi.qty_rcv_tolerance AS "Overreceipt Tolerance %"
 , esi.qty_rcv_tolerance 
 , esi.created_by 
-, esi.creation_date 
+, esi.creation_date
+, esi.last_update_date
 , esi.enabled_flag 
 , CASE WHEN esi.lot_control_code = 2 THEN 'Full Lot Control' ELSE 'No Control' END AS "Lot Control Status"
 , esi.lot_status_enabled

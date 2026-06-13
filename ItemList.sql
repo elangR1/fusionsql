@@ -56,7 +56,7 @@ WHERE
  AND esi.LAST_UPDATE_DATE >= TO_DATE('__START_DATE__', 'YYYY-MM-DD HH24:MI:SS')
  AND esi.LAST_UPDATE_DATE < TO_DATE('__END_DATE__', 'YYYY-MM-DD HH24:MI:SS')
  __DYNAMIC_FILTERS__
-ORDER BY 
+ORDER BY
     esi.item_number, 
     iodv.organization_code, 
     ecv.category_name

@@ -53,10 +53,9 @@ LEFT JOIN EGP_CATEGORIES_VL ecv
     ON eica.category_id = ecv.category_id
 WHERE
  esi.ORGANIZATION_ID IS NOT NULL
- --AND iodv.ORGANIZATION_NAME = 'SKLT MASTER'
  AND esi.LAST_UPDATE_DATE >= TO_DATE('__START_DATE__', 'YYYY-MM-DD HH24:MI:SS')
  AND esi.LAST_UPDATE_DATE < TO_DATE('__END_DATE__', 'YYYY-MM-DD HH24:MI:SS')
- '__DYNAMIC_FILTERS__'
+ __DYNAMIC_FILTERS__
 ORDER BY 
     esi.item_number, 
     iodv.organization_code, 

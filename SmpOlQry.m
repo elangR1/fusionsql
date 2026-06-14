@@ -1,5 +1,4 @@
 let
-    // 1. Get raw SQL text from GitHub
     GitHubUrl = "https://raw.githubusercontent.com/elangR1/fusionsql/main/ItemList.sql",
     SqlBinary = Web.Contents(GitHubUrl),
     SqlText = Text.FromBinary(SqlBinary),
@@ -17,15 +16,12 @@ let
     F_Org      = if ParamOrgName <> null and ParamOrgName <> "" then " AND iodv.ORGANIZATION_NAME = '" & ParamOrgName & "'" else "",
     ActiveFilters = F_ItemLike & F_Class & F_DescLike & F_DescNot & F_OrgIn & F_Org,
 
-    // 4. DYNAMIC INJECTION: Inject parameters cleanly into original SQL layout
     InjectDates = Text.Replace(Text.Replace(SqlText, "__START_DATE__", StartText), "__END_DATE__", EndText),
     FinalSQL    = Text.Replace(InjectDates, "__DYNAMIC_FILTERS__", ActiveFilters),
 
-    // 5. Establish connection payload parameters
     ProxyUrl = "https://stringfellow-fsn-pstgrs-prxy.hf.space/query",
     JsonPayload = Binary.Buffer(Json.FromValue([sql = FinalSQL])),
-    
-    // 6. Execute POST Request (ADDED Binary.Buffer TO PREVENT DUPLICATE CALLS)
+
     SourceWeb = Binary.Buffer(
         Web.Contents(
             ProxyUrl,
@@ -40,10 +36,7 @@ let
         )
     ),
     
-    // 7. HIGH-PERFORMANCE CSV PARSING
     CsvTable = Csv.Document(SourceWeb, [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
-    
-    // 8. Final formatting step
     #"Promoted Headers" = Table.PromoteHeaders(CsvTable, [PromoteAllScalarTypes=true])
 in
     #"Promoted Headers"

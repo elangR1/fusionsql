@@ -40,23 +40,23 @@ JOIN
   INV_UNITS_OF_MEASURE_VL ium ON esi.primary_uom_code = ium.uom_code
 JOIN 
   inv_organization_definitions_v iodv ON iodv.organization_id = esi.organization_id
-LEFT JOIN
-  inv_uom_conversions ioc ON esi.inventory_item_id = ioc.inventory_item_id
+LEFT JOIN inv_uom_conversions ioc
+  ON esi.inventory_item_id = ioc.inventory_item_id
   AND esi.primary_uom_code = ioc.uom_code
-LEFT JOIN
-  inv_uom_class_conversions iocc ON esi.inventory_item_id = iocc.inventory_item_id
+LEFT JOIN inv_uom_class_conversions iocc
+  ON esi.inventory_item_id = iocc.inventory_item_id
   AND ioc.uom_class = iocc.from_uom_class
 LEFT JOIN egp_item_cat_assignments eica 
-    ON esi.inventory_item_id = eica.inventory_item_id
-    AND esi.organization_id = eica.organization_id
+  ON esi.inventory_item_id = eica.inventory_item_id
+  AND esi.organization_id = eica.organization_id
 LEFT JOIN EGP_CATEGORIES_VL ecv 
-    ON eica.category_id = ecv.category_id
+  ON eica.category_id = ecv.category_id
 WHERE
- esi.ORGANIZATION_ID IS NOT NULL
- AND esi.LAST_UPDATE_DATE >= TO_DATE('__START_DATE__', 'YYYY-MM-DD HH24:MI:SS')
- AND esi.LAST_UPDATE_DATE < TO_DATE('__END_DATE__', 'YYYY-MM-DD HH24:MI:SS')
+  esi.ORGANIZATION_ID IS NOT NULL
+  AND esi.LAST_UPDATE_DATE >= TO_DATE('__START_DATE__', 'YYYY-MM-DD HH24:MI:SS')
+  AND esi.LAST_UPDATE_DATE < TO_DATE('__END_DATE__', 'YYYY-MM-DD HH24:MI:SS')
  __DYNAMIC_FILTERS__
 ORDER BY
-    esi.item_number, 
-    iodv.organization_code, 
-    ecv.category_name
+  esi.item_number, 
+  iodv.organization_code, 
+  ecv.category_name

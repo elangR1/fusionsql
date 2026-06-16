@@ -62,7 +62,7 @@ SELECT
 	, rsl.item_description AS item_desc
 	, wdd.lot_number AS lot_number
 	--, wdd.WMS_INTERFACED_FLAG AS "wms ok"
-	, itol.requested_qty 
+	, rsl.requested_amount 
 	, rsl.quantity_shipped AS shipped_qty
 	, rsl.quantity_received AS received_qty
 	, (rsl.quantity_shipped - rsl.quantity_received) AS intransit-exp_qty

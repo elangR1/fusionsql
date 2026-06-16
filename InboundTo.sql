@@ -1,10 +1,10 @@
 SELECT
 	rsh.receipt_source_code
-	, itoh.ordered_date AS "Order Date"
-	, itol.status_lookup AS "TO Status"
-	, iodv_source.organization_name AS "TO Source Org"
-	, iodv_dest.organization_name AS "TO Destination Org"
-	, itoh.header_number AS "TO Number"
+	, itoh.ordered_date AS Order_Date
+	, itol.status_lookup AS TO_Status
+	, iodv_source.organization_name AS TO_Source_Org
+	, iodv_dest.organization_name AS TO_Destination_Org
+	, itoh.header_number AS TO_Number
 	, itol.created_by
 	, CASE itol.interface_status_lookup
 			WHEN 'INT_WSH' THEN 'Interfaced to Shipping'
@@ -14,7 +14,7 @@ SELECT
 			WHEN 'AWT_OM' THEN 'Awaiting interface to Order Management'
 			WHEN 'ERR_OM' THEN 'Order Management interface error'
 		ELSE itol.interface_status_lookup
-		END AS "TO Interface Status"
+		END AS TO_Interface_Status
 	, CASE
 			WHEN itol.received_qty = itol.requested_qty 
 				AND itol.shipped_qty > 0 
@@ -33,16 +33,16 @@ SELECT
 			WHEN itol.status_lookup = 'OPEN'
 				AND itol.shipped_qty IS NULL THEN 'Awaiting Fulfillment'
 		ELSE itol.status_lookup
-		END AS "TO Fulfillment Status"
-	, itol.need_by_date AS "TO Rq dlv date"
-	, TO_CHAR(FROM_TZ(CAST(itoh.creation_date AS TIMESTAMP), 'UTC') AT TIME ZONE 'Asia/Jakarta', 'YY/MM/DD HH24:MI') AS "TO sch ship date"
-	, TO_CHAR(FROM_TZ(CAST(wdd.last_update_date AS TIMESTAMP), 'UTC') AT TIME ZONE 'Asia/Jakarta', 'YY/MM/DD HH24:MI') AS "TO Last Update"
+		END AS TO_Fulfillment_Status
+	, itol.need_by_date AS TO_Rq_dlv_date
+	, TO_CHAR(FROM_TZ(CAST(itoh.creation_date AS TIMESTAMP), 'UTC') AT TIME ZONE 'Asia/Jakarta', 'YY/MM/DD HH24:MI') AS TO_sch_ship_date
+	, TO_CHAR(FROM_TZ(CAST(wdd.last_update_date AS TIMESTAMP), 'UTC') AT TIME ZONE 'Asia/Jakarta', 'YY/MM/DD HH24:MI') AS TO_last_update
 	, rsh.shipment_header_id 
-	, rsh.shipment_num AS "Shipment Number"
+	, rsh.shipment_num AS Shipment_Number
 	, rsh.gl_date
 	, rsh.expected_receipt_date
-	, rsh.shipped_date as "act shipped date"
-	, rsh.attribute1 "Rcv input By"
+	, rsh.shipped_date as Act_shipped_date
+	, rsh.attribute1 Rcv_input_By
 	, CASE wdd.released_status
 			WHEN 'R' THEN 'Ready to Release'
 			WHEN 'S' THEN 'Released to Warehouse'
@@ -53,53 +53,53 @@ SELECT
 			WHEN 'D' THEN 'Cancelled'
 			WHEN 'X' THEN 'Not Applicable'
 		ELSE wdd.released_status
-		END AS "Reserve Status"
-	, wdd.batch_id AS "No PickWave"
-	, wdd.source_line_number AS "TO Lines"
+		END AS Reserve_Status
+	, wdd.batch_id AS No_PickWave
+	, wdd.source_line_number AS TO_Lines
 	--, rsl.source_document_code AS inbound_type -- Identifies PO vs TO
-	, rsl.line_num "rcv Lines"
-	, esi.item_number AS "Item Number"
-	, rsl.item_description AS "Item Desc"
-	, wdd.lot_number AS "Lot Numb"
+	, rsl.line_num rcv_lines
+	, esi.item_number AS item_number
+	, rsl.item_description AS item_desc
+	, wdd.lot_number AS lot_number
 	--, wdd.WMS_INTERFACED_FLAG AS "wms ok"
 	, itol.requested_qty 
-	, rsl.quantity_shipped AS "Shipped Qty"
-	, rsl.quantity_received AS "Received Qty"
-	, (rsl.quantity_shipped - rsl.quantity_received) AS "InT-Exp Qty"
+	, rsl.quantity_shipped AS shipped_qty
+	, rsl.quantity_received AS received_qty
+	, (rsl.quantity_shipped - rsl.quantity_received) AS intransit-exp_qty
 	, rsl.uom_code
-	, rsl.shipment_line_status_code AS "Status"
+	, rsl.shipment_line_status_code AS status
 	-- itol
-	, itol.header_id AS "Itol header"
-	, itol.requested_qty
-	, itol.INTERFACE_STATUS_LOOKUP 
+	, itol.header_id AS itol_header
+	, itol.requested_qty AS itol_rq_qty
+	, itol.interface_status_lookup
 	, itol.delivered_qty
 	, itol.received_qty
 FROM 
     inv_transfer_order_lines itol  -- ✅ Mulai dari TO Lines agar semua status muncul
 JOIN 
     inv_transfer_order_headers itoh 
-    ON itol.HEADER_ID = itoh.HEADER_ID
+    ON itol.header_id = itoh.header_id
 JOIN 
     inv_organization_definitions_v iodv_source 
-    ON itol.SOURCE_ORGANIZATION_ID = iodv_source.organization_id  -- ✅ Pakai kolom yang valid
+    ON itol.source_organization_id = iodv_source.organization_id
 JOIN 
     inv_organization_definitions_v iodv_dest 
-    ON itol.DESTINATION_ORGANIZATION_ID = iodv_dest.organization_id  -- ✅ Pakai kolom yang valid
+    ON itol.destination_organization_id = iodv_dest.organization_id
 LEFT JOIN 
-    egp_system_items_b esi 
-    ON itol.INVENTORY_ITEM_ID = esi.inventory_item_id 
-    AND itol.DESTINATION_ORGANIZATION_ID = esi.organization_id
+    egp_system_items_b esi
+    ON itol.inventory_item_id = esi.inventory_item_id 
+    AND itol.destination_organization_id = esi.organization_id
 LEFT JOIN 
     rcv_shipment_lines rsl 
-    ON itol.HEADER_ID = rsl.TRANSFER_ORDER_HEADER_ID 
-    AND itol.INVENTORY_ITEM_ID = rsl.item_id
+    ON itol.header_id = rsl.TRANSFER_ORDER_HEADER_ID 
+    AND itol.inventory_item_id = rsl.item_id
 LEFT JOIN 
     rcv_shipment_headers rsh 
     ON rsl.shipment_header_id = rsh.shipment_header_id
 LEFT JOIN 
-    WSH_DELIVERY_DETAILS wdd 
-    ON itoh.HEADER_NUMBER = wdd.sales_order_number 
-    AND itol.INVENTORY_ITEM_ID = wdd.inventory_item_id
+    wsh_delivery_details wdd 
+    ON itoh.header_number = wdd.sales_order_number 
+    AND itol.inventory_item_id = wdd.inventory_item_id
 WHERE
   itoh.ordered_date >= TO_DATE('__START_DATE__', 'YYYY-MM-DD')
   AND itoh.ordered_date < TO_DATE('__END_DATE__', 'YYYY-MM-DD')

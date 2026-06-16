@@ -103,15 +103,7 @@ LEFT JOIN
 WHERE
   itoh.ordered_date >= TO_DATE('__START_DATE__', 'YYYY-MM-DD')
   AND itoh.ordered_date < TO_DATE('__END_DATE__', 'YYYY-MM-DD')
--- itoh.ordered_date BETWEEN '2026-02-01' AND '2026-09-30'
 __DYNAMIC_FILTERS__
--- AND itol.status_lookup = 'OPEN'
--- itoh.HEADER_NUMBER = '50147'
--- itoh.HEADER_NUMBER = '90617'
--- itoh.HEADER_NUMBER = '57225'
--- AND itoh.HEADER_NUMBER = '102589'
--- rsl.shipment_line_status_code = 'EXPECTED'
--- rsl.quantity_received = 0 OR rsl.quantity_received < rsl.quantity_shipped
 ORDER BY
 wdd.source_line_id ASC
 , iodv_source.organization_name

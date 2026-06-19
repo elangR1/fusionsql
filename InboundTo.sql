@@ -104,7 +104,7 @@ WHERE
   --itoh.ordered_date >= TO_DATE('__START_DATE__', 'YYYY-MM-DD')
   --AND itoh.ordered_date < TO_DATE('__END_DATE__', 'YYYY-MM-DD')
   itoh.ordered_date BETWEEN TO_DATE('__START_DATE__', 'YYYY-MM-DD') AND TO_DATE('__END_DATE__', 'YYYY-MM-DD')
---__DYNAMIC_FILTERS__
+__DYNAMIC_FILTERS__
 ORDER BY
 wdd.source_line_id ASC
 , iodv_source.organization_name

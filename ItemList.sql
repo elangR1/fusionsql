@@ -16,7 +16,7 @@ esi.inventory_item_id
 , gcc.concatenated_segments AS Sales_Account
 , esi.planner_code
 , esi.qty_rcv_exception_code AS Overreceipt_Action
-, esi.qty_rcv_tolerance AS Overreceipt_Tolerance_%
+, esi.qty_rcv_tolerance AS Overreceipt_Tolerance
 , esi.qty_rcv_tolerance 
 , esi.created_by 
 , esi.creation_date

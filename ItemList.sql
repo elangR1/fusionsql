@@ -1,35 +1,35 @@
 SELECT
 esi.inventory_item_id
-, esi.item_number AS "Item Code"
-, esi.description AS "Item Description"
-, ium.UNIT_OF_MEASURE AS "Primary UOM"
-, ioc.CONVERSION_RATE 
-, esi.secondary_uom_code AS "Secondary UOM"
-, iocc.TO_UOM_CODE 
-, iocc.CONVERSION_RATE AS "intraclass conv"
-, esi.secondary_uom_code AS "Secondary UOM2"
+, esi.item_number AS item_code
+, esi.description AS item description
+, ium.UNIT_OF_MEASURE AS primary_UOM
+, ioc.conversion_rate
+, esi.secondary_uom_code AS secondary_UOM
+, iocc.to_uom_code 
+, iocc.conversion_rate AS intraclass_conv
+, esi.secondary_uom_code AS secondary_UOM2
 , ics.item_class_name
 , ecv.category_code
 , ecv.category_name
 , iodv.organization_code
-, iodv.organization_name AS "Organization Name"
-, gcc.CONCATENATED_SEGMENTS AS "SALES Account"
+, iodv.organization_name AS Organization_Name
+, gcc.concatenated_segments AS Sales_Account
 , esi.planner_code
-, esi.qty_rcv_exception_code AS "Overreceipt Action"
-, esi.qty_rcv_tolerance AS "Overreceipt Tolerance %"
+, esi.qty_rcv_exception_code AS Overreceipt_Action
+, esi.qty_rcv_tolerance AS Overreceipt_Tolerance_%
 , esi.qty_rcv_tolerance 
 , esi.created_by 
 , esi.creation_date
 , esi.last_update_date
 , esi.enabled_flag 
-, CASE WHEN esi.lot_control_code = 2 THEN 'Full Lot Control' ELSE 'No Control' END AS "Lot Control Status"
+, CASE WHEN esi.lot_control_code = 2 THEN 'Full Lot Control' ELSE 'No Control' END AS Lot_Control_Status
 , esi.lot_status_enabled
 , esi.lot_split_enabled
-, NULL AS "Item Template"
-, NULL AS "Assigned Category IDs"
-, esi.INVENTORY_ITEM_STATUS_CODE AS "Item Status Code"
-, esi.inventory_item_status_code AS "Item Status"
-, esi.customer_order_enabled_flag AS "Orderable"
+, NULL AS Item_Template
+, NULL AS Assigned_Category_IDs
+, esi.INVENTORY_ITEM_STATUS_CODE AS Item_Status_Code
+, esi.inventory_item_status_code AS Item_Status
+, esi.customer_order_enabled_flag AS Orderable
 FROM
   EGP_SYSTEM_ITEMS_V esi
 LEFT JOIN

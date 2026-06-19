@@ -27,7 +27,6 @@ esi.inventory_item_id
 , esi.lot_split_enabled
 , NULL AS Item_Template
 , NULL AS Assigned_Category_IDs
-, esi.INVENTORY_ITEM_STATUS_CODE AS Item_Status_Code
 , esi.inventory_item_status_code AS Item_Status
 , esi.customer_order_enabled_flag AS Orderable
 FROM

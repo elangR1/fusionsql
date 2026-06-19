@@ -1,7 +1,7 @@
 SELECT
 esi.inventory_item_id
 , esi.item_number AS item_code
-, esi.description AS item description
+, esi.description AS item_description
 , ium.UNIT_OF_MEASURE AS primary_UOM
 , ioc.conversion_rate
 , esi.secondary_uom_code AS secondary_UOM
@@ -16,7 +16,7 @@ esi.inventory_item_id
 , gcc.concatenated_segments AS Sales_Account
 , esi.planner_code
 , esi.qty_rcv_exception_code AS Overreceipt_Action
-, esi.qty_rcv_tolerance AS "Overreceipt_Tolerance_%"
+, esi.qty_rcv_tolerance AS Overreceipt_Tolerance_%
 , esi.qty_rcv_tolerance 
 , esi.created_by 
 , esi.creation_date

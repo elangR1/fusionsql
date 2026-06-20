@@ -35,6 +35,6 @@ JOIN wie_wo_statuses_tl cur_status ON wo.work_order_status_id = cur_status.wo_st
 -- Optional Work Definition Join for "Process Name"
 LEFT JOIN wis_work_definitions_int wd ON wo.work_definition_id = wd.work_definition_id 
 WHERE 
-    hist.status_change_date BETWEEN TO_DATE(''__START_DATE__', 'YYYY-MM-DD') AND TO_DATE('__END_DATE__', 'YYYY-MM-DD')
+    hist.status_change_date BETWEEN TO_DATE('__START_DATE__', 'YYYY-MM-DD') AND TO_DATE('__END_DATE__', 'YYYY-MM-DD')
 ORDER BY 
     wo.work_order_number ASC;

@@ -4,8 +4,8 @@ let
     SqlText = Text.FromBinary(SqlBinary),
 
     // 2. Mandatory Parameter Logic
-    StartDt = DateTime.ToText(RangeStart, "yyyy-MM-dd HH:mm:ss"),
-    EndDt = DateTime.ToText(RangeEnd, "yyyy-MM-dd HH:mm:ss"),
+    StartDt = DateTime.ToText(RangeStart, "yyyy-MM-dd"),
+    EndDt = DateTime.ToText(RangeEnd, "yyyy-MM-dd"),
 
     // 3. Conditional Logic: Optional dynamic filters
     //F_ItemLike = if ParamItemNumberLike <> null and ParamItemNumberLike <> "" then " AND esi.ITEM_NUMBER LIKE '" & ParamItemNumberLike & "'" else "",

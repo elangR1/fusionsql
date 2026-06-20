@@ -57,7 +57,7 @@ SELECT
 	, wdd.batch_id AS No_PickWave
 	, wdd.source_line_number AS TO_Lines
 	--, rsl.source_document_code AS inbound_type -- Identifies PO vs TO
-	, rsl.line_num rcv_lines
+	, rsl.line_num AS rcv_lines
 	, esi.item_number AS item_number
 	, rsl.item_description AS item_desc
 	, wdd.lot_number AS lot_number

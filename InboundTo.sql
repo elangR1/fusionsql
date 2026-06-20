@@ -65,7 +65,7 @@ SELECT
 	, rsl.requested_amount 
 	, rsl.quantity_shipped AS shipped_qty
 	, rsl.quantity_received AS received_qty
-	, (rsl.quantity_shipped - rsl.quantity_received) AS intransit-exp_qty
+	, (rsl.quantity_shipped - rsl.quantity_received) AS intransit_exp_qty
 	, rsl.uom_code
 	, rsl.shipment_line_status_code AS status
 	-- itol

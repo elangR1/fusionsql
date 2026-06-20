@@ -1,19 +1,19 @@
 SELECT 
-    org.organization_name AS "inventory organization name",
-    wo.work_order_number AS "work order name", 
-    wd.work_definition_header_name AS "process name",
-    item.item_number AS "Item",
-    wo.planned_start_quantity AS "planned quantity",
-    wo.completed_quantity AS "actual output quantity",
-    wo.uom_code AS "uom",
-    TO_CHAR(FROM_TZ(CAST(wo.planned_start_date AS TIMESTAMP), 'UTC') AT TIME ZONE 'Asia/Jakarta', 'YY/MM/DD HH24:MI') AS "Start date",
-    TO_CHAR(FROM_TZ(CAST(wo.closed_date AS TIMESTAMP), 'UTC') AT TIME ZONE 'Asia/Jakarta', 'YY/MM/DD HH24:MI') AS "Close date",
-    TO_CHAR(FROM_TZ(CAST(wo.canceled_date AS TIMESTAMP), 'UTC') AT TIME ZONE 'Asia/Jakarta', 'YY/MM/DD HH24:MI') AS "Canceled date",
-    TO_CHAR(FROM_TZ(CAST(hist.status_change_date AS TIMESTAMP), 'UTC') AT TIME ZONE 'Asia/Jakarta', 'YY/MM/DD HH24:MI') AS "Status change date",
-    status_from.wo_status_name AS "from status",
-    status_to.wo_status_name AS "to status",
-    hist.reason,
-    hist.creation_date AS "date change"
+    org.organization_name AS inventory_organization_name
+    , wo.work_order_number AS work_order_name
+    , wd.work_definition_header_name AS process_name
+    , item.item_number AS Item
+    , wo.planned_start_quantity AS planned_quantity
+    , wo.completed_quantity AS actual_output_quantity
+    , wo.uom_code AS uom
+    , TO_CHAR(FROM_TZ(CAST(wo.planned_start_date AS TIMESTAMP), 'UTC') AT TIME ZONE 'Asia/Jakarta', 'YY/MM/DD HH24:MI') AS Start_date
+    , TO_CHAR(FROM_TZ(CAST(wo.closed_date AS TIMESTAMP), 'UTC') AT TIME ZONE 'Asia/Jakarta', 'YY/MM/DD HH24:MI') AS Close_date
+    , TO_CHAR(FROM_TZ(CAST(wo.canceled_date AS TIMESTAMP), 'UTC') AT TIME ZONE 'Asia/Jakarta', 'YY/MM/DD HH24:MI') AS Canceled_date
+    , TO_CHAR(FROM_TZ(CAST(hist.status_change_date AS TIMESTAMP), 'UTC') AT TIME ZONE 'Asia/Jakarta', 'YY/MM/DD HH24:MI') AS Status_change_date
+    , status_from.wo_status_name AS from_status
+    , status_to.wo_status_name AS to_status
+    , hist.reason
+    , hist.creation_date AS date_change
 FROM 
     wie_wo_status_history hist
 JOIN

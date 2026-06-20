@@ -37,4 +37,4 @@ LEFT JOIN wis_work_definitions_int wd ON wo.work_definition_id = wd.work_definit
 WHERE 
     hist.status_change_date BETWEEN TO_DATE('__START_DATE__', 'YYYY-MM-DD') AND TO_DATE('__END_DATE__', 'YYYY-MM-DD')
 ORDER BY 
-    wo.work_order_number ASC;
+    wo.work_order_number ASC

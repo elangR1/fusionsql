@@ -41,8 +41,8 @@ SELECT
 	, rsh.shipment_num AS Shipment_Number
 	, rsh.gl_date
 	, rsh.expected_receipt_date
-	, rsh.shipped_date as Act_shipped_date
-	, rsh.attribute1 Rcv_input_By
+	, rsh.shipped_date AS Act_shipped_date
+	, rsh.attribute1 AS Rcv_input_By
 	, CASE wdd.released_status
 			WHEN 'R' THEN 'Ready to Release'
 			WHEN 'S' THEN 'Released to Warehouse'

@@ -1,21 +1,21 @@
 SELECT
-    iop.ORGANIZATION_NAME AS Org_Name
-    , wo.WORK_ORDER_NUMBER AS Work_Order_Name
-    , wd.WORK_DEFINITION_NAME_ID AS Process_Name
-    , parent_item.ITEM_NUMBER AS Item
-    , wo.PLANNED_START_QUANTITY AS Planned_Quantity
-    , wo.COMPLETED_QUANTITY AS Actual_Quantity
-    , wo.UOM_CODE AS UOM
-    , TO_CHAR(wo.CREATION_DATE, 'YYYY-MM-DD') AS Creation_Date
-    , TO_CHAR(wo.PLANNED_START_DATE, 'YYYY-MM-DD') AS Start_Date
-    , TO_CHAR(wo.RELEASED_DATE, 'YYYY-MM-DD') AS Release_Date
-    , TO_CHAR(wo.ACTUAL_COMPLETION_DATE, 'YYYY-MM-DD') AS Actual_Completion_Date
-    , TO_CHAR(wo.CLOSED_DATE, 'YYYY-MM-DD') AS Closed_Date
-    , status.WO_STATUS_NAME AS Status
+    iop.ORGANIZATION_NAME AS org_name
+    , wo.WORK_ORDER_NUMBER AS work_order_name
+    , wd.WORK_DEFINITION_NAME_ID AS process_name
+    , parent_item.ITEM_NUMBER AS item
+    , wo.PLANNED_START_QUANTITY AS planned_quantity
+    , wo.COMPLETED_QUANTITY AS actual_quantity
+    , wo.UOM_CODE AS uom
+    , TO_CHAR(wo.CREATION_DATE, 'YYYY-MM-DD') AS creation_date
+    , TO_CHAR(wo.PLANNED_START_DATE, 'YYYY-MM-DD') AS start_date
+    , TO_CHAR(wo.RELEASED_DATE, 'YYYY-MM-DD') AS release_date
+    , TO_CHAR(wo.ACTUAL_COMPLETION_DATE, 'YYYY-MM-DD') AS actual_completion_date
+    , TO_CHAR(wo.CLOSED_DATE, 'YYYY-MM-DD') AS closed_date
+    , status.WO_STATUS_NAME AS status
     , LISTAGG(
-        txn.Transaction_Date || '|' || txn.Transaction_Type,
+        txn.transaction_date || '|' || txn.transaction_type,
         ';'
-    ) WITHIN GROUP (ORDER BY txn.Transaction_Date) AS Transaction_History
+    ) WITHIN GROUP (ORDER BY txn.transaction_date) AS transaction_history
 FROM WIE_WORK_ORDERS_B wo
 INNER JOIN INV_ORGANIZATION_DEFINITIONS_V iop ON wo.ORGANIZATION_ID = iop.ORGANIZATION_ID
 LEFT JOIN WIS_WORK_DEFINITIONS wd ON wo.WORK_DEFINITION_ID = wd.WORK_DEFINITION_ID
@@ -33,7 +33,7 @@ INNER JOIN (
         WHERE imt.TRANSACTION_SOURCE_TYPE_ID = 5
         AND (tt.TRANSACTION_TYPE_NAME LIKE '%Material Issue%' OR tt.TRANSACTION_TYPE_NAME LIKE '%Product Completion%')
         AND imt.TRANSACTION_DATE BETWEEN '__START_DATE__' AND '__END_DATE__'
-    ) sub1
+    )
     GROUP BY WORK_ORDER_ID
     HAVING MIN(CASE WHEN TRANSACTION_TYPE_NAME LIKE '%Product Completion%' THEN TRUNC(TRANSACTION_DATE) END) < 
            MIN(CASE WHEN TRANSACTION_TYPE_NAME LIKE '%Material Issue%' THEN TRUNC(TRANSACTION_DATE) END)
@@ -41,8 +41,8 @@ INNER JOIN (
 INNER JOIN (
     SELECT 
         WORK_ORDER_ID,
-        TO_CHAR(TRANSACTION_DATE, 'YYYY-MM-DD HH24:MI:SS') AS Transaction_Date,
-        TRANSACTION_TYPE_NAME AS Transaction_Type,
+        TO_CHAR(TRANSACTION_DATE, 'YYYY-MM-DD HH24:MI:SS') AS transaction_date,
+        TRANSACTION_TYPE_NAME AS transaction_type,
         ROW_NUMBER() OVER (PARTITION BY WORK_ORDER_ID, TRANSACTION_TYPE_NAME ORDER BY TRANSACTION_DATE) as rn
     FROM (
         SELECT 
@@ -54,7 +54,7 @@ INNER JOIN (
         WHERE imt.TRANSACTION_SOURCE_TYPE_ID = 5
         AND (tt.TRANSACTION_TYPE_NAME LIKE '%Material Issue%' OR tt.TRANSACTION_TYPE_NAME LIKE '%Product Completion%')
         AND imt.TRANSACTION_DATE BETWEEN '__START_DATE__' AND '__END_DATE__'
-    ) sub2
+    )
 ) txn ON wo.WORK_ORDER_ID = txn.WORK_ORDER_ID AND txn.rn = 1
 GROUP BY 
     iop.ORGANIZATION_NAME

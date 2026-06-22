@@ -75,7 +75,7 @@ SELECT
 	, itol.delivered_qty
 	, itol.received_qty
 FROM 
-    inv_transfer_order_lines itol  -- ✅ Mulai dari TO Lines agar semua status muncul
+    inv_transfer_order_lines itol
 JOIN 
     inv_transfer_order_headers itoh 
     ON itol.header_id = itoh.header_id
@@ -91,7 +91,7 @@ LEFT JOIN
     AND itol.destination_organization_id = esi.organization_id
 LEFT JOIN 
     rcv_shipment_lines rsl 
-    ON itol.header_id = rsl.TRANSFER_ORDER_HEADER_ID 
+    ON itol.header_id = rsl.transfer_order_header_id 
     AND itol.inventory_item_id = rsl.item_id
 LEFT JOIN 
     rcv_shipment_headers rsh 
@@ -101,11 +101,7 @@ LEFT JOIN
     ON itoh.header_number = wdd.sales_order_number 
     AND itol.inventory_item_id = wdd.inventory_item_id
 WHERE
-  --itoh.ordered_date >= TO_DATE('__START_DATE__', 'YYYY-MM-DD')
-  --AND itoh.ordered_date < TO_DATE('__END_DATE__', 'YYYY-MM-DD')
-  --itoh.ordered_date BETWEEN TO_DATE('__START_DATE__', 'YYYY-MM-DD') AND TO_DATE('__END_DATE__', 'YYYY-MM-DD')
   itoh.ordered_date BETWEEN '__START_DATE__' AND '__END_DATE__'
---__DYNAMIC_FILTERS__
 ORDER BY
 wdd.source_line_id ASC
 , iodv_source.organization_name

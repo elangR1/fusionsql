@@ -23,19 +23,15 @@ JOIN
 JOIN
     egp_system_items_b item ON wo.inventory_item_id = item.inventory_item_id
     AND wo.organization_id = item.organization_id
--- Status Joins for history
 JOIN wie_wo_statuses_tl status_from ON hist.old_status_id = status_from.wo_status_id 
     AND status_from.language = 'US'
 JOIN wie_wo_statuses_tl status_to ON hist.new_status_id = status_to.wo_status_id 
     AND status_to.language = 'US'
--- Join to CURRENT WO status - only include Released and Completed
 JOIN wie_wo_statuses_tl cur_status ON wo.work_order_status_id = cur_status.wo_status_id 
     AND cur_status.language = 'US'
     AND UPPER(cur_status.wo_status_name) IN ('RELEASED', 'COMPLETED')
--- Optional Work Definition Join for "Process Name"
 LEFT JOIN wis_work_definitions_int wd ON wo.work_definition_id = wd.work_definition_id 
 WHERE 
-    -- hist.status_change_date BETWEEN TO_DATE('__START_DATE__', 'YYYY-MM-DD') AND TO_DATE('__END_DATE__', 'YYYY-MM-DD')
     hist.status_change_date BETWEEN '__START_DATE__' AND '__END_DATE__'
 ORDER BY 
     wo.work_order_number ASC

@@ -13,8 +13,8 @@ SELECT
     , TO_CHAR(wo.CLOSED_DATE, 'YYYY-MM-DD') AS closed_date
     , status.WO_STATUS_NAME AS status
     , LISTAGG(
-        txn.transaction_date || '|' || txn.transaction_type,
-        ';'
+        txn.transaction_date || '|' || txn.transaction_type
+        , ';'
     ) WITHIN GROUP (ORDER BY txn.transaction_date) AS transaction_history
 FROM WIE_WORK_ORDERS_B wo
 INNER JOIN INV_ORGANIZATION_DEFINITIONS_V iop ON wo.ORGANIZATION_ID = iop.ORGANIZATION_ID

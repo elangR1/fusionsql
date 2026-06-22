@@ -1,53 +1,51 @@
 SELECT
-    BU.BU_NAME,
-    DHA.CREATION_DATE,
-    TO_DATE(TO_CHAR(DHA.CREATION_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD') AS CREATION_DATE2,
-    DHA.ORDERED_DATE,
-    DHA.ORDER_NUMBER,
-    DST_H.DISPLAY_NAME AS ORDER_STATUS,
-    DHA.CUSTOMER_PO_NUMBER,
-    HZP.PARTY_NAME AS CUSTOMER_NAME,
-    FLVHT.MEANING AS ORDER_TYPE,
-    DHEB.ATTRIBUTE_CHAR1 AS INPUT_BY,
-    DLA.LINE_NUMBER,
-    ESIB.ITEM_NUMBER AS ITEM_CODE,
-    ESIT.DESCRIPTION AS ITEM_DESCRIPTION,
-    DLA.ORDERED_QTY AS QUANTITY,
-    DLA.ORDERED_UOM AS UOM,
-    DFL.REQUEST_SHIP_DATE,
-    DFL.ACTUAL_SHIP_DATE,
-    DST_L.DISPLAY_NAME AS LINE_STATUS,
---    UPPER(DST_L.DISPLAY_NAME) AS LINE_STATUS,
-    IOU.ORGANIZATION_NAME AS IO_NAME
+    bu.bu_name,
+    dha.creation_date,
+    to_date(to_char(dha.creation_date, 'yyyy-mm-dd'), 'yyyy-mm-dd') AS creation_date2,
+    dha.ordered_date,
+    dha.order_number,
+    dst_h.display_name AS order_status,
+    dha.customer_po_number,
+    hzp.party_name AS customer_name,
+    flvht.meaning AS order_type,
+    dheb.attribute_char1 AS input_by,
+    dla.line_number,
+    esib.item_number AS item_code,
+    esit.description AS item_description,
+    dla.ordered_qty AS quantity,
+    dla.ordered_uom AS uom,
+    dfl.request_ship_date,
+    dfl.actual_ship_date,
+    dst_l.display_name AS line_status,
+    iou.organization_name AS io_name
 FROM
-    DOO_HEADERS_ALL DHA
-    JOIN DOO_LINES_ALL DLA ON DHA.HEADER_ID = DLA.HEADER_ID
-    JOIN DOO_FULFILL_LINES_ALL DFL ON DLA.LINE_ID = DFL.LINE_ID
-    JOIN DOO_HEADERS_EFF_B DHEB ON DHA.HEADER_ID = DHEB.HEADER_ID
-    							AND DHEB.CONTEXT_CODE = 'Global'
-    LEFT JOIN EGP_SYSTEM_ITEMS_B ESIB ON DFL.INVENTORY_ITEM_ID = ESIB.INVENTORY_ITEM_ID
-                                     AND DFL.INVENTORY_ORGANIZATION_ID = ESIB.ORGANIZATION_ID
-    LEFT JOIN EGP_SYSTEM_ITEMS_TL ESIT ON ESIB.INVENTORY_ITEM_ID = ESIT.INVENTORY_ITEM_ID
-                                        AND ESIB.ORGANIZATION_ID = ESIT.ORGANIZATION_ID
-                                        AND ESIT.LANGUAGE = USERENV('LANG')
-    LEFT JOIN INV_ORGANIZATION_DEFINITIONS_V IOU ON DFL.FULFILL_ORG_ID = IOU.ORGANIZATION_ID
-    LEFT JOIN FUN_ALL_BUSINESS_UNITS_V BU ON DHA.ORG_ID = BU.BU_ID
-    LEFT JOIN HZ_PARTIES HZP ON DHA.SOLD_TO_PARTY_ID = HZP.PARTY_ID
-    LEFT JOIN HZ_CUST_ACCOUNTS HCA ON HZP.PARTY_ID = HCA.CUST_ACCOUNT_ID
-    LEFT JOIN DOO_STATUSES_B DSB_H ON DHA.STATUS_CODE = DSB_H.STATUS_CODE
-    LEFT JOIN DOO_STATUSES_TL DST_H ON DSB_H.STATUS_ID = DST_H.STATUS_ID 
-                                   AND DST_H.LANGUAGE = USERENV('LANG')
-    LEFT JOIN DOO_STATUSES_B DSB_L ON DFL.STATUS_CODE = DSB_L.STATUS_CODE
-    LEFT JOIN DOO_STATUSES_TL DST_L ON DSB_L.STATUS_ID = DST_L.STATUS_ID 
-                                   AND DST_L.LANGUAGE = USERENV('LANG')
-    LEFT JOIN FND_LOOKUP_VALUES_VL FLVHT ON DHA.ORDER_TYPE_CODE = FLVHT.LOOKUP_CODE
-                                        AND FLVHT.LOOKUP_TYPE = 'ORA_DOO_ORDER_TYPES'
-                                        AND FLVHT.VIEW_APPLICATION_ID = 0
-WHERE DHA.STATUS_CODE <> 'DOO_REFERENCE'
-    AND TRUNC(DHA.CREATION_DATE) BETWEEN TO_DATE('__START_DATE__', 'YYYY-MM-DD') AND TO_DATE('__END_DATE__', 'YYYY-MM-DD')
-    AND DST_L.DISPLAY_NAME NOT IN ('CANCELED','Canceled','Closed')
+    doo_headers_all dha
+    JOIN doo_lines_all dla ON dha.header_id = dla.header_id
+    JOIN doo_fulfill_lines_all dfl ON dla.line_id = dfl.line_id
+    JOIN doo_headers_eff_b dheb ON dha.header_id = dheb.header_id
+    							AND dheb.cONtext_code = 'Global'
+    left JOIN egp_system_items_b esib ON dfl.inventory_item_id = esib.inventory_item_id
+                                     AND dfl.inventory_organizatiON_id = esib.organizatiON_id
+    left JOIN egp_system_items_tl esit ON esib.inventory_item_id = esit.inventory_item_id
+                                        AND esib.organizatiON_id = esit.organizatiON_id
+                                        AND esit.language = USERENV('LANG')
+    left JOIN inv_organizatiON_definitiONs_v iou ON dfl.fulfill_org_id = iou.organizatiON_id
+    left JOIN fun_all_business_units_v bu ON dha.org_id = bu.bu_id
+    left JOIN hz_parties hzp ON dha.sold_to_party_id = hzp.party_id
+    left JOIN hz_cust_accounts hca ON hzp.party_id = hca.cust_account_id
+    left JOIN doo_statuses_b dsb_h ON dha.status_code = dsb_h.status_code
+    left JOIN doo_statuses_tl dst_h ON dsb_h.status_id = dst_h.status_id 
+                                   AND dst_h.language = userenv('lang')
+    left JOIN doo_statuses_b dsb_l ON dfl.status_code = dsb_l.status_code
+    left JOIN doo_statuses_tl dst_l ON dsb_l.status_id = dst_l.status_id 
+                                   AND dst_l.language = USERENV('LANG')
+    left JOIN fnd_lookup_values_vl flvht ON dha.order_type_code = flvht.lookup_code
+                                        AND flvht.lookup_type = 'ORA_DOO_ORDER_TYPES'
+                                        AND flvht.view_applicatiON_id = 0
+WHERE dha.status_code <> 'doo_reference'
+    AND trunc(dha.creatiON_date) BETWEEN TO_DATE('__START_DATE__', 'YYYY-MM-DD') AND TO_DATE('__END_DATE__', 'YYYY-MM-DD')
+    AND dst_l.display_name NOT IN ('CANCELED','Canceled','Closed')
 ORDER BY
---    BU.BU_NAME ASC NULLS LAST,
-    DHA.ORDER_NUMBER DESC NULLS LAST,
-    DHA.CREATION_DATE ASC NULLS LAST,
-    DLA.LINE_NUMBER
+    dha.order_number desc nulls last,
+    dha.creatiON_date asc nulls last,
+    dla.line_number

@@ -29,7 +29,7 @@ JOIN wie_wo_statuses_tl status_to ON hist.new_status_id = status_to.wo_status_id
     AND status_to.language = 'US'
 JOIN wie_wo_statuses_tl cur_status ON wo.work_order_status_id = cur_status.wo_status_id 
     AND cur_status.language = 'US'
-    AND UPPER(cur_status.wo_status_name) IN ('RELEASED', 'COMPLETED')
+    --AND UPPER(cur_status.wo_status_name) IN ('RELEASED', 'COMPLETED')
 LEFT JOIN wis_work_definitions_int wd ON wo.work_definition_id = wd.work_definition_id 
 WHERE 
     hist.status_change_date BETWEEN '__START_DATE__' AND '__END_DATE__'

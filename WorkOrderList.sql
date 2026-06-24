@@ -48,4 +48,4 @@ LEFT JOIN
 WHERE 
 	hist.status_change_date BETWEEN '__START_DATE__' AND '__END_DATE__'
 ORDER BY 
-    wo.work_order_number ASC;
+    wo.work_order_number ASC

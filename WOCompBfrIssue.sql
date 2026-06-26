@@ -1,17 +1,17 @@
 SELECT
-    iop.ORGANIZATION_NAME AS org_name
-    , wo.WORK_ORDER_NUMBER AS work_order_name
-    , wd.WORK_DEFINITION_NAME_ID AS process_name
-    , parent_item.ITEM_NUMBER AS item
-    , wo.PLANNED_START_QUANTITY AS planned_quantity
+    iop.organization_name AS org_name
+    , wo.work_order_number AS work_order_name
+    , wd.work_definition_name_id AS process_name
+    , parent_item.item_number AS item
+    , wo.planned_start_quantity AS planned_quantity
     , wo.COMPLETED_QUANTITY AS actual_quantity
-    , wo.UOM_CODE AS uom
+    , wo.uom_code AS uom
     , TO_CHAR(wo.CREATION_DATE, 'YYYY-MM-DD') AS creation_date
     , TO_CHAR(wo.PLANNED_START_DATE, 'YYYY-MM-DD') AS start_date
     , TO_CHAR(wo.RELEASED_DATE, 'YYYY-MM-DD') AS release_date
     , TO_CHAR(wo.ACTUAL_COMPLETION_DATE, 'YYYY-MM-DD') AS actual_completion_date
     , TO_CHAR(wo.CLOSED_DATE, 'YYYY-MM-DD') AS closed_date
-    , status.WO_STATUS_NAME AS status
+    , status.wo_status_name AS status
     , LISTAGG(
         txn.transaction_date || '|' || txn.transaction_type
         , ';'
@@ -57,18 +57,18 @@ INNER JOIN (
     )
 ) txn ON wo.WORK_ORDER_ID = txn.WORK_ORDER_ID AND txn.rn = 1
 GROUP BY 
-    iop.ORGANIZATION_NAME
-    , wo.WORK_ORDER_NUMBER
-    , wd.WORK_DEFINITION_NAME_ID
-    , parent_item.ITEM_NUMBER
-    , wo.PLANNED_START_QUANTITY
-    , wo.COMPLETED_QUANTITY
-    , wo.UOM_CODE
-    , wo.CREATION_DATE
-    , wo.PLANNED_START_DATE
-    , wo.RELEASED_DATE
-    , wo.ACTUAL_COMPLETION_DATE
-    , wo.CLOSED_DATE
-    , status.WO_STATUS_NAME
+    iop.organization_name
+    , wo.work_order_number
+    , wd.work_definition_name_id
+    , parent_item.item_number
+    , wo.planned_start_quantity
+    , wo.completed_quantity
+    , wo.uom_code
+    , wo.creation_date
+    , wo.planned_start_date
+    , wo.released_date
+    , wo.actual_completion_date
+    , wo.closed_date
+    , status.wo_status_name
 ORDER BY 
-    wo.WORK_ORDER_NUMBER
+    wo.work_order_number

@@ -74,6 +74,7 @@ SELECT
 	, itol.interface_status_lookup
 	, itol.delivered_qty
 	, itol.received_qty
+	, TO_CHAR(FROM_TZ(CAST(itol.creation_date AS TIMESTAMP), 'UTC') AT TIME ZONE 'Asia/Jakarta', 'YY/MM/DD HH24:MI') AS to_creation_date
 FROM 
     inv_transfer_order_lines itol
 JOIN 

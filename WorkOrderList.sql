@@ -45,6 +45,11 @@ LEFT JOIN
     wis_work_definitions_int wd ON wo.work_definition_id = wd.work_definition_id 
 LEFT JOIN
     WO_Close_Dates cd ON wo.work_order_id = cd.work_order_id
+JOIN
+	wie_wo_statuses_tl cur_status ON wo.work_order_status_id = cur_status.wo_status_id 
+    AND cur_status.language = 'US'
+LEFT JOIN
+	wis_work_definitions_int wd ON wo.work_definition_id = wd.work_definition_id 
 WHERE 
 	hist.status_change_date BETWEEN '__START_DATE__' AND '__END_DATE__'
 ORDER BY 

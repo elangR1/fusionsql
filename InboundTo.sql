@@ -103,7 +103,8 @@ LEFT JOIN
     AND itol.inventory_item_id = wdd.inventory_item_id
 WHERE
   -- itoh.ordered_date BETWEEN '__START_DATE__' AND '__END_DATE__'
-  itoh.ordered_date BETWEEN TO_DATE('__START_DATE__', 'YYYY-MM-DD') AND TO_DATE('__END_DATE__', 'YYYY-MM-DD') + 1
+  -- itoh.ordered_date BETWEEN TO_DATE('__START_DATE__', 'YYYY-MM-DD') AND TO_DATE('__END_DATE__', 'YYYY-MM-DD') + 1
+  itol.creation_date BETWEEN '__START_DATE__' AND '__END_DATE__
 ORDER BY
 wdd.source_line_id ASC
 , iodv_source.organization_name
